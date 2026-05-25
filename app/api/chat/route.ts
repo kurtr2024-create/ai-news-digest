@@ -18,14 +18,17 @@ interface DigestContext {
 }
 
 export async function POST(req: NextRequest) {
-  const { message, digest } = (await req.json()) as { message: string; digest: DigestContext };
+  const { message, digest } = (await req.json()) as {
+    message: string;
+    digest: DigestContext;
+  };
 
   if (!message?.trim()) {
     return new Response(JSON.stringify({ error: "Message required" }), { status: 400 });
   }
 
   const articlesContext = digest?.articles
-    ?.map((a, i) => `[${i + 1}] "${a.title}" — ${a.source}\n${a.summary}`)
+    ?.map((a, i) => `[${i + 1}] "${a.title}" - ${a.source}\n${a.summary}`)
     .join("\n\n") ?? "No articles available.";
 
   const systemPrompt = `You are an AI assistant for the AI News Daily Digest. You have deep knowledge of today's top AI news stories and help users understand and explore them.
@@ -38,7 +41,7 @@ Guidelines:
 - Answer questions about today's articles concisely and insightfully
 - If asked about something not in today's digest, say so and offer to discuss what is covered
 - Keep responses focused and under 3 paragraphs unless a detailed breakdown is requested
-- Never make up article content — only reference what's in the digest above`;
+- Never make up article content - only reference what's in the digest above`;
 
   const stream = await client.messages.stream({
     model: "claude-sonnet-4-6",
@@ -59,7 +62,5 @@ Guidelines:
     },
   });
 
-  return new Response(readable, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
-  });
+  return new Response(readable, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
 }

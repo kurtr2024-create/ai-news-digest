@@ -1,13 +1,7 @@
 "use client";
 
-interface HeaderProps {
-  onSubscribeClick: () => void;
-}
-
-export default function Header({ onSubscribeClick }: HeaderProps) {
-  const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long", month: "long", day: "numeric",
-  });
+export default function Header({ onSubscribeClick }: { onSubscribeClick: () => void }) {
+  const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
   return (
     <header className="sticky top-0 z-50 border-b border-[#1f1f1f] bg-[#0a0a0a]/90 backdrop-blur-md">
       <div className="flex items-center justify-between px-6 py-4">

@@ -1,4 +1,5 @@
 "use client";
+
 import ArticleCard from "./ArticleCard";
 
 interface Article { title: string; source: string; url: string; summary: string; publishedAt: string; }
