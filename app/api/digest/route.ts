@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export const maxDuration = 60;
-export const revalidate = 86400; // 24 hours — ISR re-fetches in background after expiry
+export const revalidate = 3600; // 1 hour — ISR re-fetches in background after expiry
 
 export async function GET() {
   const webhookUrl = process.env.N8N_DIGEST_WEBHOOK_URL;
@@ -12,7 +12,7 @@ export async function GET() {
   try {
     const res = await fetch(webhookUrl, {
       headers: { Accept: "application/json" },
-      next: { revalidate: 86400 },
+      next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -22,7 +22,7 @@ export async function GET() {
     const data = await res.json();
     return NextResponse.json(data, {
       headers: {
-        "Cache-Control": "public, max-age=86400, stale-while-revalidate=3600",
+        "Cache-Control": "public, max-age=3600, stale-while-revalidate=300",
       },
     });
   } catch (err) {
